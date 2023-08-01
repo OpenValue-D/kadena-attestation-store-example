@@ -1,4 +1,4 @@
-import {Col, Container, Image, ModalFooter, Row} from "react-bootstrap";
+import {Image} from "react-bootstrap";
 
 export default function Footer() {
     return (
