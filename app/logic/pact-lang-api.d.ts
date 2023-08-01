@@ -1,0 +1,1 @@
+declare module 'pact-lang-api' //to import a JS component into a TS project
