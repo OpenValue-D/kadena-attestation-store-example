@@ -20,9 +20,9 @@
 (define-keyset "programming-certification.cert-default-ks" (read-keyset "cert-default-keyset")) ; creates keyset, but better to do it separately
 
 (module programming-certification GOVERNANCE
-    @doc "Contains logic to support creating and looking up the certifications records in the blockchain
-    \as well as managing the certification organizations accounts
-    \Version: 0.1
+    @doc "Contains logic to support creating and looking up the certifications records in the blockchain\
+    \as well as managing the certification organizations accounts\
+    \Version: 0.1\
     \Author: Konstantin Gubanov"
 
     ;  todo: check capabilities
