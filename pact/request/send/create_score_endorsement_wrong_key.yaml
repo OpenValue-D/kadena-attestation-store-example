@@ -1,0 +1,13 @@
+type: exec
+code: (free.score-endorsement-module.create-score-endorsement (read-msg "id") (read-msg "name") (read-msg "date") (read-decimal "score") (read-msg "graphData") (read-msg "testCodes") (read-msg "scoreEndorsementBody"))
+data:
+  id: "765439"
+  name: "Tom"
+  date: "2023-07-23T13:30:45Z"
+  score: 100500.1
+  graphData: "as:12,s:1,r:23"
+  testCodes: "1,4,5A"
+  scoreEndorsementBody: "6"
+keyPairs:
+  - public: eed1f83db0fcced5a668c2e397bedfe3ed33643f0f919426edca52bbd2e215c1
+    secret: 73ee51d18cdd0bbc3a944b9dcd6cd6f109082974753216043cf157db8cdbdeb1

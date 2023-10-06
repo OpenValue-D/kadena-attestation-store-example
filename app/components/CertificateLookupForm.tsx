@@ -12,19 +12,12 @@ interface CertificateLookupFormProps {
 
 export default function CertificateLookupForm({searchState, setSearchShowState, setSearchResults}: CertificateLookupFormProps) {
 
-    function convertResultsToJson(data: string): JSON {
-        return JSON.parse(data)
+    function convertResultsToJson(data: Object): JSON {
+        return JSON.parse(JSON.stringify(data))
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault() //prevent auto form submitting and page reloading
-        // @ts-ignore
-        if (event.nativeEvent.submitter.id === "create_btn") {
-            const id = event.currentTarget.certIdInput.value
-            const name = event.currentTarget.lastNameInput.value
-            createCert(id, name)
-            return 
-        }
         setSearchShowState(CertSearchAndShowState.loading)
         const id = event.currentTarget.certIdInput.value
         const name = event.currentTarget.lastNameInput.value
@@ -80,7 +73,6 @@ export default function CertificateLookupForm({searchState, setSearchShowState, 
                             </Form.Label>
                         </Row>
                         <Button variant="primary" type={"submit"}>Search</Button>
-                        <Button variant="secondary" type={"submit"} id={"create_btn"}>Create</Button>
                     </Form>
                 </Col>
                 <Col lg={3}/>

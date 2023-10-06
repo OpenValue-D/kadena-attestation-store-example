@@ -6,7 +6,7 @@ export default function AppNavbar() {
             <Navbar expand={"lg"} className={"bg-body-tertiary"}>
                 <Container>
                     <Navbar.Brand href={"#home"}>
-                        <Image src={"cert-system-logo-lg.png"} alt={"Certification Portal"} height={"50"}/>
+                        <Navbar.Text>Certification Portal</Navbar.Text>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse className={"py-3"}>
