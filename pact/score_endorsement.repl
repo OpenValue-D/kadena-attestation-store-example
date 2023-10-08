@@ -2,6 +2,9 @@
 (begin-tx)
 (env-data {"init": true, "score-admin-keyset": ["admin-pubkey"], "score-user-keyset": ["org1-pubkey"]})
 (define-namespace 'free (read-keyset 'score-admin-keyset) (read-keyset 'score-admin-keyset))
+(env-sigs [{ "key": "admin-pubkey", "caps": [] }])
+(namespace 'free)
+(define-keyset "free.score-admin-keyset" (read-keyset "score-admin-keyset"))
 
 (commit-tx)
 

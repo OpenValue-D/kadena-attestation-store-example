@@ -1,0 +1,5 @@
+type: exec
+code: (free.score-endorsement-module.read-score-endorsement (read-msg "id") (read-msg "name"))
+data:
+  id: "765439"
+  name: "Tom"

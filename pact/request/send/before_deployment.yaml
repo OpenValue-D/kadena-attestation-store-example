@@ -3,6 +3,7 @@ code: |-
   (define-namespace 'free (read-keyset 'score-admin-keyset) (read-keyset 'score-admin-keyset))
   (namespace 'free)
   (define-keyset "free.score-user-keyset" (read-keyset "score-user-keyset"))
+  (define-keyset "free.score-admin-keyset" (read-keyset "score-admin-keyset"))
 data:
   score-admin-keyset: ["ba54b224d1924dd98403f5c751abdd10de6cd81b0121800bf7bdbdcfaec7388d"]
   score-user-keyset: ["eed1f83db0fcced5a668c2e397bedfe3ed33643f0f919426edca52bbd2e215c0"]

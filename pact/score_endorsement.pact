@@ -1,8 +1,6 @@
 (namespace "free")
 
-(enforce-keyset (read-keyset "score-admin-keyset"))
-(define-keyset "free.score-admin-keyset" (read-keyset "score-admin-keyset"))
-  
+(enforce-keyset (read-keyset "score-admin-keyset"))  
 
 (module score-endorsement-module "free.score-admin-keyset"
 
