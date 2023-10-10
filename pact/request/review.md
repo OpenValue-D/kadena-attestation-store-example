@@ -1,11 +1,12 @@
 1. Smart contract deployment.
     1.1 Define namespace, define key-sets
     1.2 Initial deployment of the smart contract with the right key 
-    1.3 Deployment of the smart contract with the wrong key fails
+    1.3 Deployment of the smart contract with no key fails
 2. Creation and reading of the score endorsement 
     2.1 Score endorsement is created successfully with the user key 
     2.2 Score endorsement can be read by id and name
-    2.3 Score endorsement creation fails when wrong key 
+    2.3 Score endorsement creation fails when no key
+    2.4 Score endorsement creation fails when wrong key 
 3. Frontend 
     3.1 Creation of the score endorsement successful 
     3.2 Reading of the score endorsement successful

@@ -8,6 +8,3 @@ data:
   graphData: "as:12,s:1,r:23"
   testCodes: "1,4,5A"
   scoreEndorsementBody: "6"
-keyPairs:
-  - public: eed1f83db0fcced5a668c2e397bedfe3ed33643f0f919426edca52bbd2e215c0
-    secret: 8693e641ae2bbe9ea802c736f42027b03f86afe63cae315e7169c9c496c17332
