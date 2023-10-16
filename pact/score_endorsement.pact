@@ -1,8 +1,9 @@
 (namespace "free")
 
-(enforce-keyset (read-keyset "score-admin-keyset"))  
+(module score-endorsement-module GOVERNANCE
 
-(module score-endorsement-module "free.score-admin-keyset"
+(defcap GOVERNANCE ()
+    (enforce-guard (keyset-ref-guard "free.score-admin-keyset")))
 
 (defcap CREATE_SCORE_ENDORSEMENT ()
       @doc "Enforce only score user account can create score endorsement."

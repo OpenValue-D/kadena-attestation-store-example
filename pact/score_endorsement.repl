@@ -37,7 +37,7 @@
 (env-sigs [])
 
 ;check that write is correct
-(env-sigs [{ "key": "org1-pubkey", "caps": [ (free.score-endorsement-module.CREATE_SCORE_ENDORSEMENT) ] } ])
+(env-sigs [{ "key": "org1-pubkey", "caps": [] } ])
 (begin-tx)
 (free.score-endorsement-module.create-score-endorsement "76543" "Tom" "2023-07-23" 100500.1 "as:12,s:1,r:23" "1,4,5A" "6")
 
