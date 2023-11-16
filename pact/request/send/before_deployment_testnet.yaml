@@ -1,0 +1,20 @@
+# Sets up testnet keyset
+code: |-
+  (namespace 'free)
+  (define-keyset "free.score-user-keyset" (read-keyset "score-user-keyset"))
+  (define-keyset "free.score-admin-keyset" (read-keyset "score-admin-keyset"))
+networkId: testnet04
+publicMeta:
+  chainId: "1"
+  gasLimit: 100
+  ttl: 28000
+  sender: "10695907306cf1272d8792b08fa7482843cde91cdaceb2125a9dcde45136979c"
+  gasPrice: 0.00001
+data:
+  score-admin-keyset: ["10695907306cf1272d8792b08fa7482843cde91cdaceb2125a9dcde45136979c"]
+  score-user-keyset: ["10695907306cf1272d8792b08fa7482843cde91cdaceb2125a9dcde45136979c"]
+keyPairs:
+  - public: 10695907306cf1272d8792b08fa7482843cde91cdaceb2125a9dcde45136979c
+    secret: 00905a05afc735bbad299f6ba6361b14e622092f22ac4125b45a65eeecd209da
+  - public: 10695907306cf1272d8792b08fa7482843cde91cdaceb2125a9dcde45136979c
+    secret: 00905a05afc735bbad299f6ba6361b14e622092f22ac4125b45a65eeecd209da

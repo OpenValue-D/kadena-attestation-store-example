@@ -47,7 +47,7 @@ Before the deployment send request to the server that defines namespace and key-
 pact -a request/send/before_deployment.yaml | curl -H "Content-Type: application/json" -d @- http://localhost:8080/api/v1/send
 ```
 
-In Response you will get hash:
+In Response you will get a hash:
 ```json
 {
   "requestKeys": [
@@ -104,3 +104,44 @@ to start the development server.
 Open [http://localhost:3000](http://localhost:3000)
 
 Pact server has to be running locally.
+
+
+## Testnet deplyoment
+
+### Preparation
+```bash
+pact -a request/send/before_deployment_testnet.yaml | curl -H "Content-Type: application/json" -d @- https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/send
+```
+In Response you will get a hash:
+```json
+{
+  "requestKeys": [
+    "wWvGbvOa7LCvWz8BLHgCRnMNbbF0UkxG6KCR5XKfkaI"
+  ]
+}
+```
+With this key you can get the result of the request: 
+```bash
+curl -H "Content-Type: application/json" -d '{"requestKeys":["wWvGbvOa7LCvWz8BLHgCRnMNbbF0UkxG6KCR5XKfkaI"]}' -X POST https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/poll
+```
+
+### Deploy contract
+```bash
+pact -a request/send/deploy_contract_testnet.yaml | curl -H "Content-Type: application/json" -d @- https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/send
+```
+In Response you will get a hash:
+```json
+{
+  "requestKeys": [
+    "wWvGbvOa7LCvWz8BLHgCRnMNbbF0UkxG6KCR5XKfkaI"
+  ]
+}
+```
+
+With this key you can get the result of the request: 
+```bash
+curl -H "Content-Type: application/json" -d '{"requestKeys":["wWvGbvOa7LCvWz8BLHgCRnMNbbF0UkxG6KCR5XKfkaI"]}' -X POST https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/poll
+```
+
+### Create and read
+There are also files to create and read entries. They work the same way.

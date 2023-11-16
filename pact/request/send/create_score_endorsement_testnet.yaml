@@ -1,0 +1,21 @@
+type: exec
+code: (free.score-endorsement-module.create-score-endorsement (read-msg "id") (read-msg "name") (read-msg "date") (read-decimal "score") (read-msg "graphData") (read-msg "testCodes") (read-msg "scoreEndorsementBody"))
+networkId: testnet04
+publicMeta:
+  chainId: "1"
+  gasLimit: 1000
+  ttl: 28000
+  sender: "10695907306cf1272d8792b08fa7482843cde91cdaceb2125a9dcde45136979c"
+  gasPrice: 0.00001
+data:
+  id: "765439"
+  name: "Tom"
+  date: "2023-07-23T13:30:45Z"
+  score: 100500.1
+  graphData: "as:12,s:1,r:23"
+  testCodes: "1,4,5A"
+  scoreEndorsementBody: "6"
+keyPairs:
+  - public: 10695907306cf1272d8792b08fa7482843cde91cdaceb2125a9dcde45136979c
+    secret: 00905a05afc735bbad299f6ba6361b14e622092f22ac4125b45a65eeecd209da
+    caps: []
