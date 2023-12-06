@@ -30,6 +30,7 @@ export default function CreateEndorsement({createdResult, setCreatedResult}: Cre
                     }
                 },
                 rejectedValue => {
+                    console.log(rejectedValue);
                     setCreatedResult(ScoreCreationState.error)
                 }
             ).catch(reason => {

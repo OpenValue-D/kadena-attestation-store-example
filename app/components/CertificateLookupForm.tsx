@@ -1,8 +1,9 @@
 'use client'
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import React from "react";
-import lookupCertificate, {createCert} from "../logic/BlockchainTools"
+import lookupCertificate from "../logic/BlockchainTools"
 import {CertSearchAndShowState} from "@/app/components/CertSearchAndShow"
+import { useSearchParams } from 'next/navigation'
 
 interface CertificateLookupFormProps {
     searchState: CertSearchAndShowState
@@ -12,15 +13,27 @@ interface CertificateLookupFormProps {
 
 export default function CertificateLookupForm({searchState, setSearchShowState, setSearchResults}: CertificateLookupFormProps) {
 
+    const searchParams = useSearchParams();
+    const id: string | null = searchParams.get('id');
+    const name: string | null = searchParams.get('name');
+    if(id !== null && name !== null) {
+        showSearchResult(id, name);
+    }
+
     function convertResultsToJson(data: Object): JSON {
         return JSON.parse(JSON.stringify(data))
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault() //prevent auto form submitting and page reloading
-        setSearchShowState(CertSearchAndShowState.loading)
         const id = event.currentTarget.certIdInput.value
         const name = event.currentTarget.lastNameInput.value
+
+        showSearchResult(id, name);
+    }
+
+    function showSearchResult(id: string, name: string) {
+        setSearchShowState(CertSearchAndShowState.loading)
 
         const certPromise= lookupCertificate(id, name)
         
@@ -35,6 +48,7 @@ export default function CertificateLookupForm({searchState, setSearchShowState, 
             },
             rejectedValue => {
                 //todo: error handling
+                console.log(rejectedValue);
                 setSearchShowState(CertSearchAndShowState.error)
             }
         ).catch(reason => {
