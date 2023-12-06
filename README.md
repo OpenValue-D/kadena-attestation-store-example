@@ -4,6 +4,14 @@ All the functionalities related to smart contract are in pact directory.
 
 To develop in Visual Studio Code use Pact and Pact Snippets extensions.
 
+### Prerequisites
+
+Generate types from the smart contract:
+```bash
+npx pactjs contract-generate --file "./pact/score_endorsement.pact"
+```
+
+
 1. How to install Pact and dependencies: 
 ```bash
 brew install kadena-io/pact/pact
@@ -145,3 +153,6 @@ curl -H "Content-Type: application/json" -d '{"requestKeys":["wWvGbvOa7LCvWz8BLH
 
 ### Create and read
 There are also files to create and read entries. They work the same way.
+
+pact -a request/send/create_score_endorsement_testnet.yaml | curl -H "Content-Type: application/json" -d @- https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/send
+pact -a request/send/read_score_endorsement_testnet.yaml | curl -H "Content-Type: application/json" -d @- https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/send
