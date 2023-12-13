@@ -1,5 +1,6 @@
-import { Time } from 'highcharts';
-import { IKeypair, Pact, createClient, createSignWithKeypair, isSignedTransaction, signWithChainweaver } from '@kadena/client';
+import { IBaseClient, ICommand, ICommandResult, IKeypair, ISubmit, ITransactionDescriptor, IUnsignedCommand, Pact, createClient, createSignWithKeypair, isSignedTransaction } from '@kadena/client';
+import { CertificateData } from '../model/Types';
+import type { ILocalCommandResult } from '@kadena/chainweb-node-client';
 
 const NETWORK_ID = "testnet01";
 const CHAIN_ID = "1";
@@ -15,11 +16,12 @@ const adminKeySet: IKeypair =  {
     publicKey: "ba54b224d1924dd98403f5c751abdd10de6cd81b0121800bf7bdbdcfaec7388d",
     secretKey: "8693e641ae2bbe9ea802c736f42027b03f86afe63cae315e7169c9c496c17332",
 }
-
-
+// TODO save things encrypted
+// TODO Return CertificateData here
+// TODO write integration tests
 export default async function lookupCertificate(id: string, lastName: string): Promise<any> {
     
-    const transaction = Pact.builder
+    const transaction: IUnsignedCommand = Pact.builder
         .execution(
             Pact.modules['free.score-endorsement-module']['read-score-endorsement'](id, lastName)
         )
@@ -33,19 +35,30 @@ export default async function lookupCertificate(id: string, lastName: string): P
         //.setNetworkId('mainnet01')
         .createTransaction();
     
-    const client = createClient(API_HOST);
+    const client: IBaseClient = createClient(API_HOST);
 
     const res = client.local(transaction);
 
     return wrapPromiseWithTimeout(res, 3000)
 }
 
-export async function createCert(id: String, name: String, date: Date, score: string, graphData: String, tasks: String, endorsementBody: String): Promise<any> {    
-    const parsedScore=parseFloat(score) 
+export async function createCert(id: string, certificateData: CertificateData): Promise<any> {    
+    const parsedScore: number =parseFloat(certificateData.score) 
+    const graphDataList: number[] = [
+        certificateData.graphData.codingSpeed, 
+        certificateData.graphData.unitTest, 
+        certificateData.graphData.regression,
+        certificateData.graphData.implement, 
+        certificateData.graphData.objectOrientation, 
+        certificateData.graphData.refactor, 
+    ];
+    // we currently cannot store json on chain, thus we just join this
+    const parsedGraphData: string = graphDataList.join(';');
 
-    const transaction = Pact.builder
+    const transaction: IUnsignedCommand = Pact.builder
     .execution(
-      Pact.modules['free.score-endorsement-module']['create-score-endorsement']( id, name, date, {decimal: parsedScore}, graphData, tasks, endorsementBody),
+      Pact.modules['free.score-endorsement-module']['create-score-endorsement']
+      ( id, certificateData.name, certificateData.date, {decimal: parsedScore}, parsedGraphData, certificateData.tasks, certificateData.body),
     )
     .addSigner(userKeySet.publicKey//, (withCapability) => [withCapability('coin.GAS')]
       )
@@ -63,31 +76,23 @@ export async function createCert(id: String, name: String, date: Date, score: st
 
     // sign with keystore to not wait for manual approval
     const signWithKeystore = createSignWithKeypair(userKeySet);
-    const signedTx = await signWithKeystore(transaction);
+    const signedTx: IUnsignedCommand | ICommand = await signWithKeystore(transaction);
     
     const client = createClient(API_HOST);
 
     if (!isSignedTransaction(signedTx)) {
         throw new Error("Failed to sign Transaction!");
     }
-    //if (isSignedTransaction(signedTx)) {
-        //const transactionDescriptor = await client.submit(signedTx);
-        //const response = await client.listen(transactionDescriptor, {});
-        //if (response.result.status === 'failure') {
-        //throw response.result.error;
-        //} else {
-       //console.log(response.result);
-        //}
-    //}
 
     // do not execute on error - saves gas
-    const localResponse = await client.preflight(signedTx);
+    const localResponse: ILocalCommandResult = await client.preflight(signedTx);
     if(localResponse.result.status !== 'success') {
+        console.log(localResponse.result.error);
         throw new Error("Failed to preflight Transaction!");
     }
 
-    const transactionDescriptor = await client.submit(signedTx);
-    const response = client.listen(transactionDescriptor);
+    const transactionDescriptor: ITransactionDescriptor = await client.submit(signedTx);
+    const response: Promise<ICommandResult> = client.listen(transactionDescriptor);
     return wrapPromiseWithTimeout(response, 3000);
 }
 

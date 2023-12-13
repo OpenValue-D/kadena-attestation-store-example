@@ -1,25 +1,39 @@
 import { createCert } from "@/app/logic/BlockchainTools";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import { ScoreCreationState } from "./ScoreCreation";
+import { CertificateData } from "../model/Types";
 
 interface CreateEndorsementProps {
     createdResult: ScoreCreationState
     setCreatedResult: (state: ScoreCreationState) => void
 }
+
+const resultStepSize: number = 0.1;
+
 export default function CreateEndorsement({createdResult, setCreatedResult}: CreateEndorsementProps) {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault() //prevent auto form submitting and page reloading
         // @ts-ignore
         if (event.nativeEvent.submitter.id === "create_btn") {
-            const id = event.currentTarget.certIdInput.value
-            const name = event.currentTarget.lastNameInput.value
-            const date = event.currentTarget.date.value
-            const score = event.currentTarget.score.value
-            const graphData = event.currentTarget.graphData.value
-            const tasks = event.currentTarget.tasks.value
-            const endorsementBody = event.currentTarget.certBody.value
-            const createScorePromise= createCert(id, name, date, score, graphData, tasks, endorsementBody)
+            const id: string = event.currentTarget.certIdInput.value;
+            const certData: CertificateData = {
+                name: event.currentTarget.lastNameInput.value,
+                date: event.currentTarget.date.value,
+                score: event.currentTarget.score.value,
+                tasks: event.currentTarget.tasks.value,
+                body: event.currentTarget.certBody.value,
+                graphData: {
+                    codingSpeed: event.currentTarget.codingSpeed.value,
+                    unitTest: event.currentTarget.unitTest.value,
+                    regression: event.currentTarget.regression.value,
+                    implement: event.currentTarget.implement.value,
+                    objectOrientation: event.currentTarget.objectOrientation.value,
+                    refactor: event.currentTarget.refactor.value,
+                }
+            };
+
+            const createScorePromise = createCert(id, certData);
 
             createScorePromise.then(
                 resolvedValue => {
@@ -71,15 +85,53 @@ export default function CreateEndorsement({createdResult, setCreatedResult}: Cre
                             <Row>
                                 <Form.Group className={"mb-1"}>
                                     <Form.Label>Score</Form.Label>
-                                    <Form.Control type={"text"} id={"score"}/>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"score"}/>
                                     <Form.Text className={"text-muted"}>Score</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
+                                Graph Data
+                            </Row>
+                            <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Graph data</Form.Label>
-                                    <Form.Control type={"text"} id={"graphData"}/>
-                                    <Form.Text className={"text-muted"}>Graph data</Form.Text>
+                                    <Form.Label>Coding Speed</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"codingSpeed"}/>
+                                    <Form.Text className={"text-muted"}>Coding Speed</Form.Text>
+                                </Form.Group>
+                            </Row>
+                            <Row>
+                                <Form.Group className={"mb-1"}>
+                                    <Form.Label>Unit Test</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"unitTest"}/>
+                                    <Form.Text className={"text-muted"}>Unit Test</Form.Text>
+                                </Form.Group>
+                            </Row>
+                            <Row>
+                                <Form.Group className={"mb-1"}>
+                                    <Form.Label>Regression</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"regression"}/>
+                                    <Form.Text className={"text-muted"}>Regression</Form.Text>
+                                </Form.Group>
+                            </Row>
+                            <Row>
+                                <Form.Group className={"mb-1"}>
+                                    <Form.Label>Implement</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"implement"}/>
+                                    <Form.Text className={"text-muted"}>Implement</Form.Text>
+                                </Form.Group>
+                            </Row>
+                            <Row>
+                                <Form.Group className={"mb-1"}>
+                                    <Form.Label>Object Orientation</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"objectOrientation"}/>
+                                    <Form.Text className={"text-muted"}>Object Orientation</Form.Text>
+                                </Form.Group>
+                            </Row>
+                            <Row>
+                                <Form.Group className={"mb-1"}>
+                                    <Form.Label>Refactor</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"refactor"}/>
+                                    <Form.Text className={"text-muted"}>Refactor</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
