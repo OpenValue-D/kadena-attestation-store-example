@@ -23,7 +23,7 @@
         @doc "Table to store the score endorcement"
     )
     
-    (defun create-score-endorsement:string (id name date overallScore graphData testCodes scoreEndorsementBodyId)
+    (defun create-score-endorsement:string (id: string name: string date: string overallScore: decimal graphData: string testCodes: string scoreEndorsementBodyId: string)
     (with-capability (CREATE_SCORE_ENDORSEMENT)
         (insert score-endorcements id
             {

@@ -6,7 +6,7 @@ const ringBorderColor = '#666666';
 export default function getChartData(data:number[]) {
     return(
         {
-            labels: ['Coding Speed', 'Unit Test', 'Implement', 'Object Orientation', 'Refactor', 'Regression'],
+            labels: ['Coding Speed', 'Unit Test', 'Regression', 'Implement', 'Object Orientation', 'Refactor'],
             datasets: [
               {
                 label: 'Developer',
@@ -96,7 +96,7 @@ export function getChartOptions() {
                 r: {
                     pointLabels: {
                         font: {
-                          size: 14,
+                          size: 12,
                         }
                     },
                     startAngle: 30,

@@ -1,9 +1,12 @@
 'use client'
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import React from "react";
+import React, { useEffect } from "react";
 import lookupCertificate from "../logic/BlockchainTools"
 import {CertSearchAndShowState} from "@/app/components/CertSearchAndShow"
 import { useSearchParams } from 'next/navigation'
+
+let id: string | null = null;
+let name: string | null = null;
 
 interface CertificateLookupFormProps {
     searchState: CertSearchAndShowState
@@ -14,11 +17,18 @@ interface CertificateLookupFormProps {
 export default function CertificateLookupForm({searchState, setSearchShowState, setSearchResults}: CertificateLookupFormProps) {
 
     const searchParams = useSearchParams();
-    const id: string | null = searchParams.get('id');
-    const name: string | null = searchParams.get('name');
-    if(id !== null && name !== null) {
-        showSearchResult(id, name);
-    }
+    useEffect(() => {
+        if(searchParams != null) {
+            const newId: string | null = searchParams.get('id');
+            const newName: string | null = searchParams.get('name');
+            if(newId !== null && newName !== null && (id !== newId || name !== newName)) {
+                id = newId;
+                name = newName;
+                // TODO base64 decipher the name
+                showSearchResult(newId, newName);
+            }
+        }
+    });
 
     function convertResultsToJson(data: Object): JSON {
         return JSON.parse(JSON.stringify(data))

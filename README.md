@@ -154,5 +154,12 @@ curl -H "Content-Type: application/json" -d '{"requestKeys":["wWvGbvOa7LCvWz8BLH
 ### Create and read
 There are also files to create and read entries. They work the same way.
 
+Create:
+```bash
 pact -a request/send/create_score_endorsement_testnet.yaml | curl -H "Content-Type: application/json" -d @- https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/send
+```
+
+Send:
+```bash
 pact -a request/send/read_score_endorsement_testnet.yaml | curl -H "Content-Type: application/json" -d @- https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/send
+```
