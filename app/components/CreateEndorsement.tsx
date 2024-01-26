@@ -1,7 +1,7 @@
-import { createCert } from "@/app/logic/BlockchainTools";
+import { createAttestation } from "@/app/logic/BlockchainTools";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import { ScoreCreationState } from "./ScoreCreation";
-import { CertificateData } from "../model/Types";
+import { AttestationData } from "../model/Types";
 
 interface CreateEndorsementProps {
     createdResult: ScoreCreationState
@@ -16,24 +16,24 @@ export default function CreateEndorsement({createdResult, setCreatedResult}: Cre
         event.preventDefault() //prevent auto form submitting and page reloading
         // @ts-ignore
         if (event.nativeEvent.submitter.id === "create_btn") {
-            const id: string = event.currentTarget.certIdInput.value;
-            const certData: CertificateData = {
+            const id: string = event.currentTarget.attestationIdInput.value;
+            const attestationData: AttestationData = {
                 name: event.currentTarget.lastNameInput.value,
                 date: event.currentTarget.date.value,
                 score: event.currentTarget.score.value,
                 tasks: event.currentTarget.tasks.value,
-                body: event.currentTarget.certBody.value,
+                body: event.currentTarget.attestationBody.value,
                 graphData: {
-                    codingSpeed: event.currentTarget.codingSpeed.value,
-                    unitTest: event.currentTarget.unitTest.value,
-                    regression: event.currentTarget.regression.value,
-                    implement: event.currentTarget.implement.value,
-                    objectOrientation: event.currentTarget.objectOrientation.value,
-                    refactor: event.currentTarget.refactor.value,
+                    skill1: event.currentTarget.skill1.value,
+                    skill2: event.currentTarget.skill2.value,
+                    skill3: event.currentTarget.skill3.value,
+                    skill4: event.currentTarget.skill4.value,
+                    skill5: event.currentTarget.skill5.value,
+                    skill6: event.currentTarget.skill6.value,
                 }
             };
 
-            const createScorePromise = createCert(id, certData);
+            const createScorePromise = createAttestation(id, attestationData);
 
             createScorePromise.then(
                 resolvedValue => {
@@ -63,9 +63,9 @@ export default function CreateEndorsement({createdResult, setCreatedResult}: Cre
                         <Row>
                             <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Certificate ID</Form.Label>
-                                    <Form.Control type={"text"} id={"certIdInput"}/>
-                                    <Form.Text className={"text-muted"}>Certificate ID issued after the test</Form.Text>
+                                    <Form.Label>Attestation ID</Form.Label>
+                                    <Form.Control type={"text"} id={"attestationIdInput"}/>
+                                    <Form.Text className={"text-muted"}>Attestation ID issued after the test</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
@@ -94,44 +94,44 @@ export default function CreateEndorsement({createdResult, setCreatedResult}: Cre
                             </Row>
                             <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Coding Speed</Form.Label>
-                                    <Form.Control type={"number"} step={resultStepSize} id={"codingSpeed"}/>
-                                    <Form.Text className={"text-muted"}>Coding Speed</Form.Text>
+                                    <Form.Label>Skill 1</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"skill1"}/>
+                                    <Form.Text className={"text-muted"}>Skill 1</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Unit Test</Form.Label>
-                                    <Form.Control type={"number"} step={resultStepSize} id={"unitTest"}/>
-                                    <Form.Text className={"text-muted"}>Unit Test</Form.Text>
+                                    <Form.Label>Skill 2</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"skill2"}/>
+                                    <Form.Text className={"text-muted"}>Skill 2</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Regression</Form.Label>
-                                    <Form.Control type={"number"} step={resultStepSize} id={"regression"}/>
-                                    <Form.Text className={"text-muted"}>Regression</Form.Text>
+                                    <Form.Label>Skill 3</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"skill3"}/>
+                                    <Form.Text className={"text-muted"}>Skill 3</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Implement</Form.Label>
-                                    <Form.Control type={"number"} step={resultStepSize} id={"implement"}/>
-                                    <Form.Text className={"text-muted"}>Implement</Form.Text>
+                                    <Form.Label>Skill 4</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"skill4"}/>
+                                    <Form.Text className={"text-muted"}>Skill 4</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Object Orientation</Form.Label>
-                                    <Form.Control type={"number"} step={resultStepSize} id={"objectOrientation"}/>
-                                    <Form.Text className={"text-muted"}>Object Orientation</Form.Text>
+                                    <Form.Label>Skill 5</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"skill5"}/>
+                                    <Form.Text className={"text-muted"}>Skill 5</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Refactor</Form.Label>
-                                    <Form.Control type={"number"} step={resultStepSize} id={"refactor"}/>
-                                    <Form.Text className={"text-muted"}>Refactor</Form.Text>
+                                    <Form.Label>Skill 6</Form.Label>
+                                    <Form.Control type={"number"} step={resultStepSize} id={"skill6"}/>
+                                    <Form.Text className={"text-muted"}>Skill 6</Form.Text>
                                 </Form.Group>
                             </Row>
                             <Row>
@@ -143,9 +143,9 @@ export default function CreateEndorsement({createdResult, setCreatedResult}: Cre
                             </Row>
                             <Row>
                                 <Form.Group className={"mb-1"}>
-                                    <Form.Label>Certification Body</Form.Label>
-                                    <Form.Control type={"text"} id={"certBody"}/>
-                                    <Form.Text className={"text-muted"}>Certification Body</Form.Text>
+                                    <Form.Label>Attestation Body</Form.Label>
+                                    <Form.Control type={"text"} id={"attestationBody"}/>
+                                    <Form.Text className={"text-muted"}>Attestation Body</Form.Text>
                                 </Form.Group>
                             </Row>
 
@@ -153,7 +153,7 @@ export default function CreateEndorsement({createdResult, setCreatedResult}: Cre
 
                         <Row>
                             <Form.Label visuallyHidden={createdResult !== ScoreCreationState.error}
-                                        className={"text-danger"}>An error occurred while creating a certificate
+                                        className={"text-danger"}>An error occurred while creating an attestation
                             </Form.Label>
                         </Row>
                         <Button variant="secondary" type={"submit"} id={"create_btn"}>Create</Button>
@@ -163,8 +163,4 @@ export default function CreateEndorsement({createdResult, setCreatedResult}: Cre
             </Row>
         </Container>
     )
-}
-
-function setCreatedResult() {
-    throw new Error("Function not implemented.");
 }

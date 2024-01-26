@@ -1,4 +1,4 @@
-export type CertificateData = {
+export type AttestationData = {
     name: string;
     date: string;
     score: string;
@@ -8,10 +8,10 @@ export type CertificateData = {
 }
 
 export type GraphData = {
-    codingSpeed: number;
-    unitTest: number;
-    regression: number;
-    implement: number;
-    objectOrientation: number;
-    refactor: number;
+    skill1: number;
+    skill2: number;
+    skill3: number;
+    skill4: number;
+    skill5: number;
+    skill6: number;
 }

@@ -1,20 +1,20 @@
 'use client'
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import React, { useEffect } from "react";
-import lookupCertificate from "../logic/BlockchainTools"
-import {CertSearchAndShowState} from "@/app/components/CertSearchAndShow"
+import lookupAttestation from "../logic/BlockchainTools"
+import {AttestationSearchAndShowState} from "@/app/components/AttestationSearchAndShow"
 import { useSearchParams } from 'next/navigation'
 
 let id: string | null = null;
 let name: string | null = null;
 
-interface CertificateLookupFormProps {
-    searchState: CertSearchAndShowState
-    setSearchShowState: (state: CertSearchAndShowState) => void
+interface AttestationLookupFormProps {
+    searchState: AttestationSearchAndShowState
+    setSearchShowState: (state: AttestationSearchAndShowState) => void
     setSearchResults: (searchResults: JSON) => void
 }
 
-export default function CertificateLookupForm({searchState, setSearchShowState, setSearchResults}: CertificateLookupFormProps) {
+export default function CertificateLookupForm({searchState, setSearchShowState, setSearchResults}: AttestationLookupFormProps) {
 
     const searchParams = useSearchParams();
     useEffect(() => {
@@ -43,23 +43,22 @@ export default function CertificateLookupForm({searchState, setSearchShowState, 
     }
 
     function showSearchResult(id: string, name: string) {
-        setSearchShowState(CertSearchAndShowState.loading)
+        setSearchShowState(AttestationSearchAndShowState.loading)
 
-        const certPromise= lookupCertificate(id, name)
+        const certPromise= lookupAttestation(id, name)
         
         certPromise.then(
             resolvedValue => {
                 if (resolvedValue && resolvedValue.result.status === "success") {
                     setSearchResults(convertResultsToJson(resolvedValue.result.data))
-                    setSearchShowState(CertSearchAndShowState.show)
+                    setSearchShowState(AttestationSearchAndShowState.show)
                 } else {
-                    setSearchShowState(CertSearchAndShowState.not_found)
+                    setSearchShowState(AttestationSearchAndShowState.not_found)
                 }
             },
             rejectedValue => {
-                //todo: error handling
                 console.log(rejectedValue);
-                setSearchShowState(CertSearchAndShowState.error)
+                setSearchShowState(AttestationSearchAndShowState.error)
             }
         ).catch(reason => {
             alert('timeout' + reason)
@@ -89,10 +88,10 @@ export default function CertificateLookupForm({searchState, setSearchShowState, 
                             </Col>
                         </Row>
                         <Row>
-                            <Form.Label visuallyHidden={searchState !== CertSearchAndShowState.not_found} 
+                            <Form.Label visuallyHidden={searchState !== AttestationSearchAndShowState.not_found} 
                                         className={"text-danger"}>No results found for given ID and Last Name
                             </Form.Label>
-                            <Form.Label visuallyHidden={searchState !== CertSearchAndShowState.error}
+                            <Form.Label visuallyHidden={searchState !== AttestationSearchAndShowState.error}
                                         className={"text-danger"}>An error occurred while searching for certificate
                             </Form.Label>
                         </Row>

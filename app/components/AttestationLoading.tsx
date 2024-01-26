@@ -4,7 +4,7 @@ import {Col, Container, Row, Spinner} from "react-bootstrap";
 /**
  * This spinner might be useful if the response from the blockchain will take some time to arrive
  */
-export default function CertLoading() {
+export default function AttestationLoading() {
     return (
         <Container>
             <Row>

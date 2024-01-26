@@ -1,6 +1,5 @@
 'use client'
 import {Col, Container, Row} from "react-bootstrap";
-import React from 'react';
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -23,16 +22,16 @@ ChartJS.register(
   Legend
 );
 
-interface SearchResultsCert {
-    searchResults: JSON //TODO: make an object out of it for clarity and to avoid IDE errors
+interface SearchResultsAttestation {
+    searchResults: JSON
 }
 
-export default function Result({searchResults}: SearchResultsCert) {
+export default function Result({searchResults}: SearchResultsAttestation) {
     return (
         <Container>
             <Row>
                 <Col>
-                    <h1>Your certification results</h1>
+                    <h1>Your Attestation results</h1>
                 </Col>
             </Row>
             <Row>
@@ -50,7 +49,7 @@ export default function Result({searchResults}: SearchResultsCert) {
             <Row>
                 <Col lg={4} sm={0}/>
                 <Col lg={4} sm={12} >
-                    <Radar data={getChartData([7.1, 8, 2.5, 7.2, 3.2, 5.5])} options={getChartOptions()} />
+                    <Radar data={getChartData(searchResults.graph.split(';'))} options={getChartOptions()} />
                 </Col>
                 <Col lg={4} sm={0}/>
             </Row>

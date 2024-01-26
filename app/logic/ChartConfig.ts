@@ -6,7 +6,7 @@ const ringBorderColor = '#666666';
 export default function getChartData(data:number[]) {
     return(
         {
-            labels: ['Coding Speed', 'Unit Test', 'Regression', 'Implement', 'Object Orientation', 'Refactor'],
+            labels: ['Skill 1', 'Skill 2', 'Skill 3', 'Skill 4', 'Skill 5', 'Skill 6'],
             datasets: [
               {
                 label: 'Developer',

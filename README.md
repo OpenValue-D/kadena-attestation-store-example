@@ -47,7 +47,7 @@ pact> (load "score_endorsement.repl")
 Start pact server on port defined in server.yaml config (8080).
 
 ```bash
-run pact -s server.yaml
+pact -s server.yaml
 ```
 
 Before the deployment send request to the server that defines namespace and key-sets:
@@ -161,5 +161,5 @@ pact -a request/send/create_score_endorsement_testnet.yaml | curl -H "Content-Ty
 
 Send:
 ```bash
-pact -a request/send/read_score_endorsement_testnet.yaml | curl -H "Content-Type: application/json" -d @- https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/send
+pact -a request/send/read_score_endorsement_testnet.yaml | curl -H "Content-Type: application/json" -d @- https://api.testnet.chainweb.com/chainweb/0.0/testnet04/chain/1/pact/api/v1/local
 ```

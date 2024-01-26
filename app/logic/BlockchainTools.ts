@@ -1,56 +1,52 @@
-import { IBaseClient, ICommand, ICommandResult, IKeypair, ISubmit, ITransactionDescriptor, IUnsignedCommand, Pact, createClient, createSignWithKeypair, isSignedTransaction } from '@kadena/client';
-import { CertificateData } from '../model/Types';
+import { IClient, ICommand, ICommandResult, IKeypair, ITransactionDescriptor, IUnsignedCommand, Pact, createClient, createSignWithKeypair, isSignedTransaction } from '@kadena/client';
+import { AttestationData } from '../model/Types';
 import type { ILocalCommandResult } from '@kadena/chainweb-node-client';
 
-const NETWORK_ID = "testnet01";
-const CHAIN_ID = "1";
-const API_HOST = "http://localhost:8080";
+const chainId: string = process.env.NEXT_PUBLIC_CHAIN_ID ?? "0";
+const networkId: string = process.env.NEXT_PUBLIC_NETWORK_ID ?? "";
 
+const gasLimit: number | undefined = process.env.NEXT_PUBLIC_BLOCKCHAIN_GAS_LIMIT ? parseFloat(process.env.NEXT_PUBLIC_BLOCKCHAIN_GAS_LIMIT) : undefined;
+const gasPrice: number | undefined = process.env.NEXT_PUBLIC_BLOCKCHAIN_GAS_PRICE ? parseFloat(process.env.NEXT_PUBLIC_BLOCKCHAIN_GAS_PRICE) : undefined;
 
+if (!process.env.NEXT_PUBLIC_API_HOST) { throw new Error("API_HOST missing in .env!")}
+const client: IClient = createClient(process.env.NEXT_PUBLIC_API_HOST ?? "");
+
+if (!process.env.NEXT_PUBLIC_USER_PUBLIC_KEY) { throw new Error("USER_PUBLIC_KEY missing in .env!") };
+if (!process.env.NEXT_PUBLIC_USER_SECRET_KEY) { throw new Error("USER_SECRET_KEY missing in .env!") };
 const userKeySet: IKeypair =  {
-    publicKey: "eed1f83db0fcced5a668c2e397bedfe3ed33643f0f919426edca52bbd2e215c0",
-    secretKey: "73ee51d18cdd0bbc3a944b9dcd6cd6f109082974753216043cf157db8cdbdeb1",
+    publicKey: process.env.NEXT_PUBLIC_USER_PUBLIC_KEY ?? "",
+    secretKey: process.env.NEXT_PUBLIC_USER_SECRET_KEY ?? "",
 }
 
-const adminKeySet: IKeypair =  {
-    publicKey: "ba54b224d1924dd98403f5c751abdd10de6cd81b0121800bf7bdbdcfaec7388d",
-    secretKey: "8693e641ae2bbe9ea802c736f42027b03f86afe63cae315e7169c9c496c17332",
-}
-// TODO save things encrypted
-// TODO Return CertificateData here
-// TODO write integration tests
-export default async function lookupCertificate(id: string, lastName: string): Promise<any> {
+const readTimeoutSeconds: number = parseInt(process.env.NEXT_PUBLIC_BLOCKCHAIN_READ_TIMEOUT_SECONDS ?? "3");
+const writeTimeoutSeconds: number = parseInt(process.env.NEXT_PUBLIC_BLOCKCHAIN_WRITE_TIMEOUT_SECONDS ?? "3");
+
+export default async function lookupAttestation(id: string, lastName: string): Promise<any> {
     
     const transaction: IUnsignedCommand = Pact.builder
         .execution(
             Pact.modules['free.score-endorsement-module']['read-score-endorsement'](id, lastName)
         )
         .setMeta({ 
-            chainId: '1',
-            //gasLimit: 1000,
-            //gasPrice: 1.0e-6,
-            //senderAccount,
-            //ttl: 10 * 60, // 10 minutes
+            chainId: chainId,
         })
-        //.setNetworkId('mainnet01')
+        .setNetworkId(networkId)
         .createTransaction();
-    
-    const client: IBaseClient = createClient(API_HOST);
 
-    const res = client.local(transaction);
+        const res = client.local(transaction);
 
-    return wrapPromiseWithTimeout(res, 3000)
+    return wrapPromiseWithTimeout(res, readTimeoutSeconds)
 }
 
-export async function createCert(id: string, certificateData: CertificateData): Promise<any> {    
-    const parsedScore: number =parseFloat(certificateData.score) 
+export async function createAttestation(id: string, attestationData: AttestationData): Promise<any> {    
+    const parsedScore: number =parseFloat(attestationData.score) 
     const graphDataList: number[] = [
-        certificateData.graphData.codingSpeed, 
-        certificateData.graphData.unitTest, 
-        certificateData.graphData.regression,
-        certificateData.graphData.implement, 
-        certificateData.graphData.objectOrientation, 
-        certificateData.graphData.refactor, 
+        attestationData.graphData.skill1,
+        attestationData.graphData.skill2, 
+        attestationData.graphData.skill3,
+        attestationData.graphData.skill4, 
+        attestationData.graphData.skill5, 
+        attestationData.graphData.skill6, 
     ];
     // we currently cannot store json on chain, thus we just join this
     const parsedGraphData: string = graphDataList.join(';');
@@ -58,49 +54,48 @@ export async function createCert(id: string, certificateData: CertificateData): 
     const transaction: IUnsignedCommand = Pact.builder
     .execution(
       Pact.modules['free.score-endorsement-module']['create-score-endorsement']
-      ( id, certificateData.name, certificateData.date, {decimal: parsedScore}, parsedGraphData, certificateData.tasks, certificateData.body),
+      ( id, attestationData.name, attestationData.date, {decimal: parsedScore}, parsedGraphData, attestationData.tasks, attestationData.body),
     )
-    .addSigner(userKeySet.publicKey//, (withCapability) => [withCapability('coin.GAS')]
-      )
-    //.addKeyset('free', 'score-user-keyset', userKeySet.publicKey)
+    .addSigner(userKeySet.publicKey, (withCapability) => [
+        withCapability('coin.GAS'),
+        withCapability('free.score-endorsement-module.CREATE_SCORE_ENDORSEMENT'),
+    ])
     .addKeyset('ks', 'keys-all', userKeySet.publicKey)
     .setMeta({ 
-        chainId: '1',
-        //senderAccount: userKeySet.publicKey, // pays the gas
-        //gasLimit: 1000,
-        //gasPrice: 1.0e-6,
-        //ttl: 10 * 60, // 10 minutes
+        chainId: chainId,
+        senderAccount: userKeySet.publicKey, // pays the gas
+        gasLimit: gasLimit,
+        gasPrice: gasPrice,
+        ttl: writeTimeoutSeconds,
     })
-    //.setNetworkId(NETWORK_ID)
+    .setNetworkId(networkId)
     .createTransaction(); 
 
     // sign with keystore to not wait for manual approval
     const signWithKeystore = createSignWithKeypair(userKeySet);
     const signedTx: IUnsignedCommand | ICommand = await signWithKeystore(transaction);
     
-    const client = createClient(API_HOST);
-
     if (!isSignedTransaction(signedTx)) {
-        throw new Error("Failed to sign Transaction!");
+        return Promise.reject(new Error("Failed to sign Transaction!"));
     }
 
     // do not execute on error - saves gas
     const localResponse: ILocalCommandResult = await client.preflight(signedTx);
     if(localResponse.result.status !== 'success') {
         console.log(localResponse.result.error);
-        throw new Error("Failed to preflight Transaction!");
+        return Promise.reject(new Error("Failed to preflight Transaction!"));
     }
 
     const transactionDescriptor: ITransactionDescriptor = await client.submit(signedTx);
     const response: Promise<ICommandResult> = client.listen(transactionDescriptor);
-    return wrapPromiseWithTimeout(response, 3000);
+    return wrapPromiseWithTimeout(response, writeTimeoutSeconds);
 }
 
-export function wrapPromiseWithTimeout<T>(promise: Promise<T>, delayMs: number, reason: string = 'request timeout'): Promise<T> {
+export function wrapPromiseWithTimeout<T>(promise: Promise<T>, delaySeconds: number, reason: string = 'request timeout'): Promise<T> {
     const timeout = new Promise<never>((_, reject) => {
         setTimeout(() => {
             reject(new Error(reason))
-        }, delayMs)
+        }, delaySeconds * 1000)
     })
     return Promise.race<T>([promise, timeout])
 }
